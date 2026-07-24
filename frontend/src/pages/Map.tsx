@@ -164,11 +164,12 @@ export function Map() {
       </div>
 
       {/* Main Map */}
-      <div className="flex-1 h-full relative z-0">
+      <div className="flex-1 h-full relative z-0" style={{ backgroundColor: '#0B0F19' }}>
         <MapContainer 
           center={[22.5937, 78.9629]} 
           zoom={5} 
-          className="w-full h-full"
+          className="w-full h-full bg-slate-950"
+          style={{ background: '#0B0F19', backgroundColor: '#0B0F19' }}
           zoomControl={false}
         >
           <MapController selectedIncident={selectedIncident} />
