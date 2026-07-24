@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-gray-100 font-sans antialiased overflow-x-hidden;
+  }
+  .leaflet-container,
+  .leaflet-layer,
+  .leaflet-pane,
+  .leaflet-tile-pane,
+  .leaflet-map-pane,
+  .leaflet-tile-container {
+    background: #0B0F19 !important;
+    background-color: #0B0F19 !important;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-surface/60 backdrop-blur-md border border-surfaceBorder;
+  }
+  .glass-card {
+    @apply bg-surface/80 backdrop-blur-xl border border-surfaceBorder rounded-2xl shadow-2xl;
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-light to-accent;
+  }
+  .map-container {
+    height: calc(100vh - 4rem);
+  }
+}
+
+/* Custom Scrollbar for a premium feel */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0B0F19; 
+}
+::-webkit-scrollbar-thumb {
+  background: #1F2937; 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #374151; 
+}
+
+/* Radar Beacon Animation */
+.radar-beacon {
+  width: 24px;
+  height: 24px;
+  background-color: rgba(244, 63, 94, 0.2);
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.radar-beacon::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #f43f5e;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #f43f5e, 0 0 20px #f43f5e;
+}
+
+.radar-beacon::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  border: 2px solid #f43f5e;
+  border-radius: 50%;
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+/* Yellow variation for lower severity */
+.radar-beacon.yellow-beacon {
+  background-color: rgba(245, 158, 11, 0.2);
+}
+.radar-beacon.yellow-beacon::before {
+  background-color: #f59e0b;
+  box-shadow: 0 0 10px #f59e0b, 0 0 20px #f59e0b;
+}
+.radar-beacon.yellow-beacon::after {
+  border-color: #f59e0b;
+}
