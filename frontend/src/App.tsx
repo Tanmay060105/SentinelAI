@@ -10,6 +10,7 @@ import { Settings } from './pages/Settings';
 import { Landing } from './pages/Landing';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { AlertsProvider } from './context/AlertsContext';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
@@ -51,10 +52,12 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <AppRoutes />
+      <AlertsProvider>
+        <Router>
+          <AppRoutes />
+        </Router>
         <ToastContainer theme="dark" position="top-right" />
-      </Router>
+      </AlertsProvider>
     </AuthProvider>
   );
 }

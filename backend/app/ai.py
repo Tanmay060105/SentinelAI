@@ -60,7 +60,7 @@ def augment_incident_with_ai(title: str, description: str) -> dict:
         print(f"AI Generation failed: {e}")
         return {
             "ai_summary": "[ERROR] AI analysis failed due to an exception.",
-            "severity": 1.0,
+            "severity": 5.0,
             "confidence": 0.0,
             "news_headline": "[ERROR] Failed to generate headline",
             "image_keywords": "error"
