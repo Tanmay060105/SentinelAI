@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, BackgroundTasks
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
 from typing import List
@@ -119,8 +119,25 @@ def create_incident(incident: schemas.IncidentCreate, db: Session = Depends(data
     db.refresh(db_incident)
     return db_incident
 
+is_sync_running = False
+
+def background_sync_task():
+    global is_sync_running
+    db = database.SessionLocal()
+    try:
+        from .live_news import sync_live_news
+        count = sync_live_news(db)
+        print(f"Background sync complete. Added {count} new incidents.")
+    finally:
+        is_sync_running = False
+        db.close()
+
 @app.post("/sync-news")
-def trigger_news_sync(db: Session = Depends(database.get_db)):
-    from .live_news import sync_live_news
-    count = sync_live_news(db)
-    return {"message": f"Successfully synced {count} new live events from India."}
+def trigger_news_sync(background_tasks: BackgroundTasks):
+    global is_sync_running
+    if is_sync_running:
+        return {"message": "A sync is already in progress. Please wait."}
+        
+    is_sync_running = True
+    background_tasks.add_task(background_sync_task)
+    return {"message": "News sync started in the background. It may take up to 2-3 minutes due to AI processing."}

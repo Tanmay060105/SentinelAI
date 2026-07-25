@@ -55,6 +55,7 @@ export function Map() {
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   const [showDetailedSummary, setShowDetailedSummary] = useState(false);
   const [mapStyle, setMapStyle] = useState(localStorage.getItem('mapStyle') || 'dark');
+  const [syncMessage, setSyncMessage] = useState("");
 
   const fetchIncidents = async () => {
     try {
@@ -93,11 +94,16 @@ export function Map() {
             <button 
               onClick={async () => {
                 setIsSyncing(true);
+                setSyncMessage("Syncing in background...");
                 try {
-                  await apiClient.post('/sync-news');
+                  const res = await apiClient.post('/sync-news');
+                  setSyncMessage(res.data.message);
                   await fetchIncidents();
+                  setTimeout(() => setSyncMessage(""), 10000); // clear after 10s
                 } catch (e) {
                   console.error(e);
+                  setSyncMessage("Failed to start sync.");
+                  setTimeout(() => setSyncMessage(""), 5000);
                 } finally {
                   setIsSyncing(false);
                 }
@@ -117,6 +123,19 @@ export function Map() {
             </button>
           </div>
         </div>
+        
+        <AnimatePresence>
+          {syncMessage && (
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              exit={{ opacity: 0 }}
+              className="mb-4 p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs rounded-lg"
+            >
+              {syncMessage}
+            </motion.div>
+          )}
+        </AnimatePresence>
         
         {isLoading ? (
           <div className="flex justify-center items-center h-32">
@@ -236,12 +255,14 @@ export function Map() {
                 <img 
                   src={selectedIncident.image_keywords?.startsWith('http') 
                     ? selectedIncident.image_keywords 
-                    : `https://image.pollinations.ai/prompt/photorealistic%20news%20photography%20of%20${encodeURIComponent(selectedIncident.news_headline || selectedIncident.title)}?width=400&height=300&nologo=true`
+                    : `https://image.pollinations.ai/prompt/photorealistic%20news%20photography%20of%20${encodeURIComponent(selectedIncident.image_keywords || selectedIncident.category)}?width=400&height=300&nologo=true&seed=${selectedIncident.id}`
                   }
                   alt="Context"
                   className="w-full h-full object-cover opacity-80 mix-blend-luminosity hover:mix-blend-normal transition-all duration-700"
                   onError={(e) => {
-                    e.currentTarget.src = `https://picsum.photos/seed/${selectedIncident.id}/400/300`;
+                    e.currentTarget.onerror = null; // prevent infinite loops
+                    // If the RSS image fails (which happens often), fall back to an AI generated image based on the category
+                    e.currentTarget.src = `https://image.pollinations.ai/prompt/photorealistic%20news%20photography%20of%20${encodeURIComponent(selectedIncident.category)}%20crisis%20event?width=400&height=300&nologo=true&seed=${selectedIncident.id}`;
                   }}
                 />
               </div>
