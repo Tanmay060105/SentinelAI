@@ -6,7 +6,9 @@ import apiClient from '../api/client';
 import L from 'leaflet';
 import { SubmitIncidentModal } from '../components/SubmitIncidentModal';
 import { HeatmapLayer } from '../components/HeatmapLayer';
+import { PlaybookModal } from '../components/PlaybookModal';
 import { Layers } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 interface Incident {
   id: number;
@@ -59,11 +61,33 @@ export function Map() {
   const [mapStyle, setMapStyle] = useState(localStorage.getItem('mapStyle') || 'dark');
   const [syncMessage, setSyncMessage] = useState("");
   const [viewMode, setViewMode] = useState<'pins' | 'heatmap'>('pins');
+  const [isPlaybookOpen, setIsPlaybookOpen] = useState(false);
 
   const fetchIncidents = async () => {
     try {
       const response = await apiClient.get('/incidents');
-      setIncidents(response.data);
+      const fetchedIncidents = response.data;
+      setIncidents(fetchedIncidents);
+
+      // Check for new high-severity incidents
+      const notifiedIds = new Set(JSON.parse(localStorage.getItem('notifiedIncidentIds') || '[]'));
+      let hasNewNotifications = false;
+
+      fetchedIncidents.forEach((incident: Incident) => {
+        if (incident.severity >= 4.5 && !notifiedIds.has(incident.id)) {
+          toast.error(`CRITICAL THREAT DETECTED: ${incident.title}`, {
+            icon: '🚨',
+            autoClose: 10000,
+            style: { border: '1px solid #ef4444', backgroundColor: '#450a0a' }
+          });
+          notifiedIds.add(incident.id);
+          hasNewNotifications = true;
+        }
+      });
+
+      if (hasNewNotifications) {
+        localStorage.setItem('notifiedIncidentIds', JSON.stringify(Array.from(notifiedIds)));
+      }
     } catch (error) {
       console.error("Failed to fetch incidents", error);
     } finally {
@@ -353,7 +377,10 @@ export function Map() {
                     Source <ExternalLink className="w-4 h-4" />
                   </a>
                 )}
-                <button className="flex-[2] bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20">
+                <button 
+                  onClick={() => setIsPlaybookOpen(true)}
+                  className="flex-[2] bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20"
+                >
                   Deploy Response <ExternalLink className="w-4 h-4" />
                 </button>
               </div>
@@ -368,6 +395,13 @@ export function Map() {
         onSuccess={() => {
           fetchIncidents(); // Refresh immediately
         }}
+      />
+      
+      <PlaybookModal 
+        isOpen={isPlaybookOpen}
+        onClose={() => setIsPlaybookOpen(false)}
+        incidentId={selectedIncident?.id || null}
+        incidentTitle={selectedIncident?.title || ""}
       />
     </div>
   );

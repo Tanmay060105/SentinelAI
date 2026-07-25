@@ -15,8 +15,8 @@ class UserResponse(UserBase):
     role: RoleEnum
     created_at: datetime
     
-    class Config:
-        from_attributes = True
+class PlaybookResponse(BaseModel):
+    markdown_content: str
 
 # Incident Schemas
 class IncidentBase(BaseModel):

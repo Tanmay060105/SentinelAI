@@ -45,7 +45,7 @@ export function Login() {
         });
         
         login(access_token, userRes.data);
-        navigate('/map');
+        navigate('/app/map');
       } else {
         // Register
         await apiClient.post('/users', { email, password });
@@ -61,7 +61,7 @@ export function Login() {
           headers: { Authorization: `Bearer ${access_token}` }
         });
         login(access_token, userRes.data);
-        navigate('/map');
+        navigate('/app/map');
       }
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Authentication failed. Please try again.');

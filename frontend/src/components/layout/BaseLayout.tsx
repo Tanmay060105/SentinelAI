@@ -19,10 +19,10 @@ function cn(...inputs: ClassValue[]) {
 }
 
 const navItems = [
-  { name: 'Live Map', href: '/map', icon: Map },
-  { name: 'Analytics', href: '/analytics', icon: BarChart2 },
-  { name: 'Sources', href: '/sources', icon: RadioTower },
-  { name: 'Settings', href: '/settings', icon: Settings },
+  { name: 'Live Map', href: '/app/map', icon: Map },
+  { name: 'Analytics', href: '/app/analytics', icon: BarChart2 },
+  { name: 'Sources', href: '/app/sources', icon: RadioTower },
+  { name: 'Settings', href: '/app/settings', icon: Settings },
 ];
 
 export function BaseLayout() {
@@ -41,11 +41,12 @@ export function BaseLayout() {
         {/* Logo Area */}
         <div className="h-16 flex items-center px-6 border-b border-slate-700/50">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg shadow-lg shadow-indigo-500/20">
-              <ShieldAlert className="w-6 h-6 text-white" />
+            <div className="bg-indigo-500/20 p-2 rounded-xl border border-indigo-500/30 overflow-hidden shadow-[0_0_15px_rgba(79,70,229,0.3)]">
+              <img src="/logo.jpg" alt="Logo" className="w-6 h-6 object-cover rounded-full" />
             </div>
-            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-100 to-slate-400">
-              SentinelAI
+            <span className="text-xl font-bold tracking-tight" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+              <span className="text-white">Sentinel</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-600">AI</span>
             </span>
           </div>
         </div>

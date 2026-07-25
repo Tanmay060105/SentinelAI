@@ -65,3 +65,58 @@ def augment_incident_with_ai(title: str, description: str) -> dict:
             "news_headline": "[ERROR] Failed to generate headline",
             "image_keywords": "error"
         }
+
+def generate_playbook(title: str, description: str, category: str, severity: float) -> str:
+    """
+    Generates a 5-step tactical response playbook in Markdown.
+    """
+    if not settings.GEMINI_API_KEY:
+        return "# Simulated Playbook\\n\\n1. **Alert Authorities**: Notify local police.\\n2. **Establish Perimeter**: Secure the area.\\n3. **Deploy Medical**: Dispatch ambulances.\\n4. **Public Advisory**: Issue warnings.\\n5. **Monitor Situation**: Continuous intelligence gathering."
+        
+    try:
+        client = genai.Client(api_key=settings.GEMINI_API_KEY)
+        
+        prompt = f"""
+        Act as an elite military-grade Crisis Commander.
+        Generate a tactical 5-step emergency response playbook for the following crisis:
+        
+        Crisis: {title}
+        Category: {category}
+        Severity: {severity}/5.0
+        Details: {description}
+        
+        Output the playbook in beautiful, clean Markdown format. 
+        Start directly with the steps. Make it actionable, professional, and specific to the crisis type.
+        Use bolding for keywords.
+        """
+        
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt,
+            config={
+                'temperature': 0.4,
+            },
+        )
+        
+        return response.text
+        
+    except Exception as e:
+        error_msg = str(e)
+        print(f"Playbook Generation failed: {error_msg}")
+        
+        if "429" in error_msg or "RESOURCE_EXHAUSTED" in error_msg:
+            return """
+> [!WARNING]
+> **AI Command Center Offline (Quota Exceeded)**
+> The Gemini AI API rate limit has been reached. Please wait a few minutes before requesting another custom playbook.
+
+### Standard Fallback Playbook
+
+1. **Assess and Secure**: Immediately secure the perimeter and assess the scale of the incident.
+2. **Dispatch Responders**: Deploy relevant emergency services (Police/Fire/Medical) based on incident category.
+3. **Establish Comms**: Open a direct communication channel with ground units.
+4. **Public Advisory**: Issue a public safety warning to avoid the affected area.
+5. **Monitor & Escalate**: Continuously monitor the situation and escalate to higher authorities if severity increases.
+            """
+            
+        return f"**Error generating playbook:** {error_msg}"

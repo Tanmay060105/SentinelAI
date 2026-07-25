@@ -7,6 +7,9 @@ import { Map } from './pages/Map';
 import { Analytics } from './pages/Analytics';
 import { Sources } from './pages/Sources';
 import { Settings } from './pages/Settings';
+import { Landing } from './pages/Landing';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
@@ -29,10 +32,11 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 function AppRoutes() {
   return (
     <Routes>
+      <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
       
-      <Route path="/" element={<ProtectedRoute><BaseLayout /></ProtectedRoute>}>
-        <Route index element={<Navigate to="/map" replace />} />
+      <Route path="/app" element={<ProtectedRoute><BaseLayout /></ProtectedRoute>}>
+        <Route index element={<Navigate to="/app/map" replace />} />
         <Route path="map" element={<Map />} />
         <Route path="analytics" element={<Analytics />} />
         <Route path="sources" element={<Sources />} />
@@ -49,6 +53,7 @@ function App() {
     <AuthProvider>
       <Router>
         <AppRoutes />
+        <ToastContainer theme="dark" position="top-right" />
       </Router>
     </AuthProvider>
   );

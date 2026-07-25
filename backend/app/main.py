@@ -94,7 +94,23 @@ def get_incidents(skip: int = 0, limit: int = 100, db: Session = Depends(databas
     incidents = db.query(models.Incident).offset(skip).limit(limit).all()
     return incidents
 
-from .ai import augment_incident_with_ai
+from fastapi import HTTPException
+from .ai import augment_incident_with_ai, generate_playbook
+
+@app.get("/incidents/{incident_id}/playbook", response_model=schemas.PlaybookResponse)
+def get_incident_playbook(incident_id: int, db: Session = Depends(database.get_db)):
+    incident = db.query(models.Incident).filter(models.Incident.id == incident_id).first()
+    if not incident:
+        raise HTTPException(status_code=404, detail="Incident not found")
+        
+    playbook_md = generate_playbook(
+        title=incident.title, 
+        description=incident.description, 
+        category=incident.category, 
+        severity=incident.severity
+    )
+    
+    return {"markdown_content": playbook_md}
 
 @app.post("/incidents", response_model=schemas.IncidentResponse)
 def create_incident(incident: schemas.IncidentCreate, db: Session = Depends(database.get_db)):
