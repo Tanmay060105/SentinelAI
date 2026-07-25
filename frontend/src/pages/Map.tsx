@@ -5,6 +5,8 @@ import { Loader2, ShieldCheck, Activity, X, Newspaper, BrainCircuit, ExternalLin
 import apiClient from '../api/client';
 import L from 'leaflet';
 import { SubmitIncidentModal } from '../components/SubmitIncidentModal';
+import { HeatmapLayer } from '../components/HeatmapLayer';
+import { Layers } from 'lucide-react';
 
 interface Incident {
   id: number;
@@ -56,6 +58,7 @@ export function Map() {
   const [showDetailedSummary, setShowDetailedSummary] = useState(false);
   const [mapStyle, setMapStyle] = useState(localStorage.getItem('mapStyle') || 'dark');
   const [syncMessage, setSyncMessage] = useState("");
+  const [viewMode, setViewMode] = useState<'pins' | 'heatmap'>('pins');
 
   const fetchIncidents = async () => {
     try {
@@ -196,7 +199,12 @@ export function Map() {
             attribution='&copy; OpenStreetMap &copy; CARTO / Esri'
             url={tileUrl}
           />
-          {incidents.map((incident) => (
+          {viewMode === 'heatmap' && (
+            <HeatmapLayer 
+              points={incidents.map(inc => [inc.latitude, inc.longitude, inc.severity / 2.0] as [number, number, number])} 
+            />
+          )}
+          {viewMode === 'pins' && incidents.map((incident) => (
             <Marker 
               key={incident.id} 
               position={[incident.latitude, incident.longitude]}
@@ -210,6 +218,19 @@ export function Map() {
             />
           ))}
         </MapContainer>
+
+        {/* View Mode Toggle */}
+        <div className="absolute top-4 right-4 z-[400]">
+          <button 
+            onClick={() => setViewMode(viewMode === 'pins' ? 'heatmap' : 'pins')}
+            className="flex items-center gap-2 bg-slate-900/90 hover:bg-slate-800 text-slate-200 px-4 py-2 rounded-xl backdrop-blur-md border border-slate-700 shadow-xl transition-all"
+          >
+            <Layers className="w-5 h-5 text-indigo-400" />
+            <span className="font-semibold text-sm">
+              {viewMode === 'pins' ? 'Switch to Heatmap' : 'Switch to Pins'}
+            </span>
+          </button>
+        </div>
       </div>
 
       {/* Detailed Intelligence Slide-Out Panel */}
