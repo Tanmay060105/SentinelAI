@@ -102,54 +102,36 @@
   border-color: #f59e0b;
 }
 
-/* Deep Tactical Map styling - True Night/Dark Satellite Recon */
-.tactical-dark-satellite,
-.tactical-dark-satellite img,
-img.leaflet-tile.tactical-dark-satellite,
-.leaflet-tile-pane .tactical-dark-satellite {
-  filter: brightness(0.24) contrast(1.45) grayscale(0.7) !important;
+/* SentinelAI Cyber Dark-Blue Map Theme */
+.sentinel-blue-tiles,
+.sentinel-blue-tiles img,
+img.leaflet-tile.sentinel-blue-tiles,
+.leaflet-tile-pane .sentinel-blue-tiles {
+  filter: brightness(0.38) contrast(1.35) hue-rotate(210deg) saturate(2.2) !important;
 }
 
-.tactical-dark-tiles {
-  filter: brightness(0.42) contrast(1.3) grayscale(0.8) !important;
+.sentinel-label-tiles,
+.sentinel-label-tiles img,
+img.leaflet-tile.sentinel-label-tiles,
+.leaflet-tile-pane .sentinel-label-tiles {
+  filter: brightness(1.3) contrast(1.2) hue-rotate(200deg) !important;
+  opacity: 0.9 !important;
 }
 
-.tactical-label-tiles,
-.tactical-label-tiles img,
-img.leaflet-tile.tactical-label-tiles,
-.leaflet-tile-pane .tactical-label-tiles {
-  filter: brightness(1.4) contrast(1.3) !important;
-  opacity: 0.95 !important;
-}
-
-.tactical-tooltip {
-  background-color: rgba(15, 23, 42, 0.92) !important;
-  border: 1px solid rgba(99, 102, 241, 0.5) !important;
-  color: #f1f5f9 !important;
-  font-family: 'Orbitron', sans-serif !important;
-  font-size: 11px !important;
-  letter-spacing: 0.05em !important;
-  padding: 4px 8px !important;
-  border-radius: 6px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
-}
-.tactical-tooltip::before {
-  display: none !important;
-}
-
-.tactical-tooltip-green {
-  background-color: rgba(6, 30, 18, 0.94) !important;
-  border: 1px solid #10b981 !important;
-  color: #34d399 !important;
+.sentinel-tooltip-blue {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border: 1px solid rgba(99, 102, 241, 0.6) !important;
+  color: #e0e7ff !important;
   font-family: 'Orbitron', sans-serif !important;
   font-size: 11px !important;
   font-weight: 600 !important;
   letter-spacing: 0.08em !important;
-  padding: 4px 10px !important;
-  border-radius: 6px !important;
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.45) !important;
+  padding: 5px 12px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4) !important;
+  backdrop-filter: blur(8px) !important;
 }
-.tactical-tooltip-green::before {
+.sentinel-tooltip-blue::before {
   display: none !important;
 }
 

@@ -115,11 +115,11 @@ export function Map() {
       .catch(err => console.error("Could not load state outlines:", err));
   }, []);
 
-  let tileUrl = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
-  if (mapStyle === 'street') {
+  let tileUrl = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}";
+  if (mapStyle === 'satellite') {
+    tileUrl = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+  } else if (mapStyle === 'street') {
     tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-  } else if (mapStyle === 'dark_canvas') {
-    tileUrl = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}";
   }
 
   return (
@@ -234,24 +234,24 @@ export function Map() {
         >
           <MapController selectedIncident={selectedIncident} />
           <TileLayer
-            className="tactical-dark-satellite"
-            attribution="Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+            className="sentinel-blue-tiles"
+            attribution="Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ"
             url={tileUrl}
           />
           {countriesData && (
             <GeoJSON 
               data={countriesData} 
               style={{
-                fillColor: '#000000',
-                fillOpacity: 0.28,
-                color: '#10b981',
+                fillColor: '#070b14',
+                fillOpacity: 0.35,
+                color: '#6366f1',
                 weight: 1.5,
                 opacity: 0.85,
               }}
               onEachFeature={(feature, layer) => {
                 if (feature.properties?.NAME) {
                   layer.bindTooltip(feature.properties.NAME, {
-                    className: 'tactical-tooltip-green',
+                    className: 'sentinel-tooltip-blue',
                     sticky: true,
                     direction: 'top'
                   });
@@ -261,8 +261,8 @@ export function Map() {
                     const l = e.target;
                     l.setStyle({
                       weight: 2.5,
-                      color: '#00ff88',
-                      fillColor: '#10b981',
+                      color: '#38bdf8',
+                      fillColor: '#6366f1',
                       fillOpacity: 0.35,
                     });
                     l.bringToFront();
@@ -270,9 +270,9 @@ export function Map() {
                   mouseout: (e) => {
                     const l = e.target;
                     l.setStyle({
-                      fillColor: '#000000',
-                      fillOpacity: 0.28,
-                      color: '#10b981',
+                      fillColor: '#070b14',
+                      fillOpacity: 0.35,
+                      color: '#6366f1',
                       weight: 1.5,
                       opacity: 0.85,
                     });
@@ -285,9 +285,9 @@ export function Map() {
             <GeoJSON 
               data={statesData} 
               style={{
-                fillColor: '#10b981',
-                fillOpacity: 0.06,
-                color: '#34d399',
+                fillColor: '#4f46e5',
+                fillOpacity: 0.08,
+                color: '#38bdf8',
                 weight: 1.4,
                 opacity: 0.9,
                 dashArray: '3, 4',
@@ -296,7 +296,7 @@ export function Map() {
                 const stateName = feature.properties?.st_nm || feature.properties?.NAME;
                 if (stateName) {
                   layer.bindTooltip(`STATE: ${stateName.toUpperCase()}`, {
-                    className: 'tactical-tooltip-green',
+                    className: 'sentinel-tooltip-blue',
                     sticky: true,
                     direction: 'top'
                   });
@@ -306,8 +306,8 @@ export function Map() {
                     const l = e.target;
                     l.setStyle({
                       weight: 2.8,
-                      color: '#00ff88',
-                      fillColor: '#10b981',
+                      color: '#38bdf8',
+                      fillColor: '#6366f1',
                       fillOpacity: 0.4,
                       dashArray: '',
                     });
@@ -316,9 +316,9 @@ export function Map() {
                   mouseout: (e) => {
                     const l = e.target;
                     l.setStyle({
-                      fillColor: '#10b981',
-                      fillOpacity: 0.06,
-                      color: '#34d399',
+                      fillColor: '#4f46e5',
+                      fillOpacity: 0.08,
+                      color: '#38bdf8',
                       weight: 1.4,
                       opacity: 0.9,
                       dashArray: '3, 4',
@@ -329,7 +329,7 @@ export function Map() {
             />
           )}
           <TileLayer
-            className="tactical-label-tiles"
+            className="sentinel-label-tiles"
             attribution=""
             url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
           />
