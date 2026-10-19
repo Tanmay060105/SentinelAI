@@ -242,42 +242,11 @@ export function Map() {
             <GeoJSON 
               data={countriesData} 
               style={{
-                fillColor: '#0f172a',
-                fillOpacity: 0.15,
+                fillColor: 'transparent',
+                fillOpacity: 0,
                 color: '#334155',
                 weight: 1.0,
                 opacity: 0.7,
-              }}
-              onEachFeature={(feature, layer) => {
-                if (feature.properties?.NAME) {
-                  layer.bindTooltip(feature.properties.NAME, {
-                    className: 'aesthetic-tooltip',
-                    sticky: true,
-                    direction: 'top'
-                  });
-                }
-                layer.on({
-                  mouseover: (e) => {
-                    const l = e.target;
-                    l.setStyle({
-                      weight: 1.5,
-                      color: '#60a5fa',
-                      fillColor: '#38bdf8',
-                      fillOpacity: 0.12,
-                    });
-                    l.bringToFront();
-                  },
-                  mouseout: (e) => {
-                    const l = e.target;
-                    l.setStyle({
-                      fillColor: '#0f172a',
-                      fillOpacity: 0.15,
-                      color: '#334155',
-                      weight: 1.0,
-                      opacity: 0.7,
-                    });
-                  }
-                });
               }}
             />
           )}
@@ -286,43 +255,11 @@ export function Map() {
               data={statesData} 
               style={{
                 fillColor: 'transparent',
+                fillOpacity: 0,
                 color: '#1e293b',
                 weight: 0.8,
                 opacity: 0.6,
                 dashArray: '2, 3',
-              }}
-              onEachFeature={(feature, layer) => {
-                const stateName = feature.properties?.st_nm || feature.properties?.NAME;
-                if (stateName) {
-                  layer.bindTooltip(stateName, {
-                    className: 'aesthetic-tooltip',
-                    sticky: true,
-                    direction: 'top'
-                  });
-                }
-                layer.on({
-                  mouseover: (e) => {
-                    const l = e.target;
-                    l.setStyle({
-                      weight: 1.5,
-                      color: '#60a5fa',
-                      fillColor: '#38bdf8',
-                      fillOpacity: 0.15,
-                      dashArray: '',
-                    });
-                    l.bringToFront();
-                  },
-                  mouseout: (e) => {
-                    const l = e.target;
-                    l.setStyle({
-                      fillColor: 'transparent',
-                      color: '#1e293b',
-                      weight: 0.8,
-                      opacity: 0.6,
-                      dashArray: '2, 3',
-                    });
-                  }
-                });
               }}
             />
           )}
