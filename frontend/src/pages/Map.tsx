@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMap, GeoJSON } from 'react-leaflet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, ShieldCheck, Activity, X, Newspaper, BrainCircuit, ExternalLink, Plus, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react';
 import apiClient from '../api/client';
@@ -62,6 +62,7 @@ export function Map() {
   const [syncMessage, setSyncMessage] = useState("");
   const [viewMode, setViewMode] = useState<'pins' | 'heatmap'>('pins');
   const [isPlaybookOpen, setIsPlaybookOpen] = useState(false);
+  const [countriesData, setCountriesData] = useState<any>(null);
 
   const fetchIncidents = async () => {
     try {
@@ -99,6 +100,13 @@ export function Map() {
     fetchIncidents();
     const interval = setInterval(fetchIncidents, 10000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    fetch('/countries.json')
+      .then(res => res.json())
+      .then(data => setCountriesData(data))
+      .catch(err => console.error("Could not load country outlines:", err));
   }, []);
 
   let tileUrl = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}";
@@ -224,6 +232,27 @@ export function Map() {
             attribution="Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ"
             url={tileUrl}
           />
+          {countriesData && (!mapStyle || mapStyle === 'dark') && (
+            <GeoJSON 
+              data={countriesData} 
+              style={{
+                fillColor: '#090d16',
+                fillOpacity: 0.45,
+                color: '#64748b',
+                weight: 1.2,
+                opacity: 0.9,
+              }}
+              onEachFeature={(feature, layer) => {
+                if (feature.properties?.NAME) {
+                  layer.bindTooltip(feature.properties.NAME, {
+                    className: 'tactical-tooltip',
+                    sticky: true,
+                    direction: 'top'
+                  });
+                }
+              }}
+            />
+          )}
           {(!mapStyle || mapStyle === 'dark') && (
             <TileLayer
               className="tactical-label-tiles"
