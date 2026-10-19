@@ -234,7 +234,7 @@ export function Map() {
         >
           <MapController selectedIncident={selectedIncident} />
           <TileLayer
-            className="sentinel-blue-tiles"
+            className="aesthetic-dark-tiles"
             attribution="Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ"
             url={tileUrl}
           />
@@ -242,16 +242,16 @@ export function Map() {
             <GeoJSON 
               data={countriesData} 
               style={{
-                fillColor: '#070b14',
-                fillOpacity: 0.35,
-                color: '#6366f1',
-                weight: 1.5,
-                opacity: 0.85,
+                fillColor: '#0f172a',
+                fillOpacity: 0.15,
+                color: '#334155',
+                weight: 1.0,
+                opacity: 0.7,
               }}
               onEachFeature={(feature, layer) => {
                 if (feature.properties?.NAME) {
                   layer.bindTooltip(feature.properties.NAME, {
-                    className: 'sentinel-tooltip-blue',
+                    className: 'aesthetic-tooltip',
                     sticky: true,
                     direction: 'top'
                   });
@@ -260,21 +260,21 @@ export function Map() {
                   mouseover: (e) => {
                     const l = e.target;
                     l.setStyle({
-                      weight: 2.5,
-                      color: '#38bdf8',
-                      fillColor: '#6366f1',
-                      fillOpacity: 0.35,
+                      weight: 1.5,
+                      color: '#60a5fa',
+                      fillColor: '#38bdf8',
+                      fillOpacity: 0.12,
                     });
                     l.bringToFront();
                   },
                   mouseout: (e) => {
                     const l = e.target;
                     l.setStyle({
-                      fillColor: '#070b14',
-                      fillOpacity: 0.35,
-                      color: '#6366f1',
-                      weight: 1.5,
-                      opacity: 0.85,
+                      fillColor: '#0f172a',
+                      fillOpacity: 0.15,
+                      color: '#334155',
+                      weight: 1.0,
+                      opacity: 0.7,
                     });
                   }
                 });
@@ -285,18 +285,17 @@ export function Map() {
             <GeoJSON 
               data={statesData} 
               style={{
-                fillColor: '#4f46e5',
-                fillOpacity: 0.08,
-                color: '#38bdf8',
-                weight: 1.4,
-                opacity: 0.9,
-                dashArray: '3, 4',
+                fillColor: 'transparent',
+                color: '#1e293b',
+                weight: 0.8,
+                opacity: 0.6,
+                dashArray: '2, 3',
               }}
               onEachFeature={(feature, layer) => {
                 const stateName = feature.properties?.st_nm || feature.properties?.NAME;
                 if (stateName) {
-                  layer.bindTooltip(`STATE: ${stateName.toUpperCase()}`, {
-                    className: 'sentinel-tooltip-blue',
+                  layer.bindTooltip(stateName, {
+                    className: 'aesthetic-tooltip',
                     sticky: true,
                     direction: 'top'
                   });
@@ -305,10 +304,10 @@ export function Map() {
                   mouseover: (e) => {
                     const l = e.target;
                     l.setStyle({
-                      weight: 2.8,
-                      color: '#38bdf8',
-                      fillColor: '#6366f1',
-                      fillOpacity: 0.4,
+                      weight: 1.5,
+                      color: '#60a5fa',
+                      fillColor: '#38bdf8',
+                      fillOpacity: 0.15,
                       dashArray: '',
                     });
                     l.bringToFront();
@@ -316,12 +315,11 @@ export function Map() {
                   mouseout: (e) => {
                     const l = e.target;
                     l.setStyle({
-                      fillColor: '#4f46e5',
-                      fillOpacity: 0.08,
-                      color: '#38bdf8',
-                      weight: 1.4,
-                      opacity: 0.9,
-                      dashArray: '3, 4',
+                      fillColor: 'transparent',
+                      color: '#1e293b',
+                      weight: 0.8,
+                      opacity: 0.6,
+                      dashArray: '2, 3',
                     });
                   }
                 });
@@ -329,7 +327,7 @@ export function Map() {
             />
           )}
           <TileLayer
-            className="sentinel-label-tiles"
+            className="aesthetic-label-tiles"
             attribution=""
             url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
           />
