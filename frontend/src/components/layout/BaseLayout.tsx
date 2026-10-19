@@ -44,8 +44,18 @@ export function BaseLayout() {
         {/* Logo Area */}
         <div className="h-16 flex items-center px-6 border-b border-slate-700/50">
           <div className="flex items-center gap-3">
-            <div className="bg-indigo-500/20 p-2 rounded-xl border border-indigo-500/30 overflow-hidden shadow-[0_0_15px_rgba(79,70,229,0.3)]">
-              <img src="/logo.jpg" alt="Logo" className="w-6 h-6 object-cover rounded-full" />
+            <div className="bg-indigo-500/20 p-2 rounded-xl border border-indigo-500/30 overflow-hidden shadow-[0_0_15px_rgba(79,70,229,0.3)] flex items-center justify-center">
+              <img 
+                src="/logo.jpg" 
+                alt="Logo" 
+                className="w-6 h-6 object-cover rounded-full"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  const fallback = e.currentTarget.parentElement?.querySelector('.logo-fallback') as HTMLElement;
+                  if (fallback) fallback.style.display = 'block';
+                }}
+              />
+              <ShieldAlert className="w-6 h-6 text-indigo-400 logo-fallback hidden" />
             </div>
             <span className="text-xl font-bold tracking-tight" style={{ fontFamily: 'Orbitron, sans-serif' }}>
               <span className="text-white">Sentinel</span>

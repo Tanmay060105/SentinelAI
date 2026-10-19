@@ -101,7 +101,7 @@ export function Map() {
     return () => clearInterval(interval);
   }, []);
 
-  let tileUrl = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+  let tileUrl = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}";
   if (mapStyle === 'satellite') {
     tileUrl = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
   } else if (mapStyle === 'street') {
@@ -220,9 +220,15 @@ export function Map() {
         >
           <MapController selectedIncident={selectedIncident} />
           <TileLayer
-            attribution='&copy; OpenStreetMap &copy; CARTO / Esri'
+            attribution="Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ"
             url={tileUrl}
           />
+          {(!mapStyle || mapStyle === 'dark') && (
+            <TileLayer
+              attribution=""
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}"
+            />
+          )}
           {viewMode === 'heatmap' && (
             <HeatmapLayer 
               points={incidents.map(inc => [inc.latitude, inc.longitude, inc.severity / 2.0] as [number, number, number])} 
