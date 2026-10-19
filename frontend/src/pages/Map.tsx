@@ -220,11 +220,13 @@ export function Map() {
         >
           <MapController selectedIncident={selectedIncident} />
           <TileLayer
+            className={(!mapStyle || mapStyle === 'dark') ? 'tactical-dark-tiles' : ''}
             attribution="Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ"
             url={tileUrl}
           />
           {(!mapStyle || mapStyle === 'dark') && (
             <TileLayer
+              className="tactical-label-tiles"
               attribution=""
               url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}"
             />
