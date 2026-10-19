@@ -243,7 +243,7 @@ export function Map() {
               data={countriesData} 
               style={{
                 fillColor: '#000000',
-                fillOpacity: 0.1,
+                fillOpacity: 0.28,
                 color: '#10b981',
                 weight: 1.5,
                 opacity: 0.85,
@@ -263,7 +263,7 @@ export function Map() {
                       weight: 2.5,
                       color: '#00ff88',
                       fillColor: '#10b981',
-                      fillOpacity: 0.25,
+                      fillOpacity: 0.35,
                     });
                     l.bringToFront();
                   },
@@ -271,7 +271,7 @@ export function Map() {
                     const l = e.target;
                     l.setStyle({
                       fillColor: '#000000',
-                      fillOpacity: 0.1,
+                      fillOpacity: 0.28,
                       color: '#10b981',
                       weight: 1.5,
                       opacity: 0.85,
